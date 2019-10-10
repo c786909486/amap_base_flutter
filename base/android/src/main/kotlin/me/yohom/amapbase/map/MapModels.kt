@@ -1,6 +1,7 @@
 package me.yohom.amapbase.map
 
 import android.graphics.Color
+import android.util.Log
 import com.amap.api.maps.AMap
 import com.amap.api.maps.AMapOptions
 import com.amap.api.maps.CameraUpdateFactory
@@ -252,6 +253,33 @@ class UnifiedPolylineOptions(
         })
     }
 
+}
+
+class UnifiedCircleOptions(
+        /// 圆中心点
+        val center: LatLng,
+        ///圆半径
+        val radius: Double,
+        ///填充颜色
+        val fillColor:String,
+        ///边框颜色
+        val strokeColor:String,
+        ///边框宽度
+        val strokeWidth:Double,
+        ///可见？
+        val visible: Boolean
+){
+    fun applyTo(map: AMap){
+        Log.d("dasdasda",radius.toString());
+        val option = CircleOptions()
+                .center(this@UnifiedCircleOptions.center)
+                .radius(this@UnifiedCircleOptions.radius)
+                .fillColor(this@UnifiedCircleOptions.fillColor.hexStringToColorInt()?:Color.parseColor("#606699fff"))
+                .strokeColor(this@UnifiedCircleOptions.strokeColor.hexStringToColorInt()?:Color.parseColor("#00000000"))
+                .strokeWidth(this@UnifiedCircleOptions.strokeWidth.toFloat())
+                .visible(this@UnifiedCircleOptions.visible)
+        map.addCircle(option)
+    }
 }
 
 class UnifiedUiSettings(

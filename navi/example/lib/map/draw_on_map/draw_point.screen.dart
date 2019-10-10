@@ -40,6 +40,11 @@ class DrawPointScreenState extends State<DrawPointScreen> {
                 Scaffold.of(context)
                     .showSnackBar(SnackBar(content: Text(marker.toString())));
               });
+              _controller.mapClickedEvent.listen((latLng) async {
+                final nextLatLng = _nextLatLng();
+                await _controller.addMarker(MarkerOptions(position: nextLatLng));
+                await _controller.changeLatLng(nextLatLng);
+              });
               controller.addMarkers(
                 markerList
                     .map((latLng) => MarkerOptions(

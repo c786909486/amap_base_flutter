@@ -13,10 +13,12 @@ import 'package:meta/meta.dart';
 class AMapController {
   final MethodChannel _mapChannel;
   final EventChannel _markerClickedEventChannel;
+  final EventChannel _mapClickedEventChannel;
 
   AMapController.withId(int id)
       : _mapChannel = MethodChannel('me.yohom/map$id'),
-        _markerClickedEventChannel = EventChannel('me.yohom/marker_clicked$id');
+        _markerClickedEventChannel = EventChannel('me.yohom/marker_clicked$id'),
+        _mapClickedEventChannel = EventChannel('me.yohom/map_clicked$id');
 
   void dispose() {}
 
@@ -201,4 +203,12 @@ class AMapController {
   Stream<MarkerOptions> get markerClickedEvent => _markerClickedEventChannel
       .receiveBroadcastStream()
       .map((data) => MarkerOptions.fromJson(jsonDecode(data)));
+
+  ///map点击事件流
+  Stream<LatLng> get mapClickedEvent => _mapClickedEventChannel
+      .receiveBroadcastStream()
+      .map((data){
+        print("hahahahahahah");
+        return LatLng.fromJson(jsonDecode(data));
+  });
 }

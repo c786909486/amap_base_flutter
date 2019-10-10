@@ -5,6 +5,7 @@ import 'package:amap_base_example/map/create_map/show_map.screen.dart';
 import 'package:amap_base_example/map/create_map/switch_map_layer.screen.dart';
 import 'package:amap_base_example/map/draw_on_map/draw_point.screen.dart';
 import 'package:amap_base_example/map/draw_on_map/draw_polyline.screen.dart';
+import 'package:amap_base_example/map/draw_on_map/drawable_circle_screen.dart';
 import 'package:amap_base_example/map/interact_with_map/code_interaction.screen.dart';
 import 'package:amap_base_example/map/interact_with_map/control_interaction.screen.dart';
 import 'package:amap_base_example/map/interact_with_map/gesture_interaction.screen.dart';
@@ -105,6 +106,12 @@ class MapDemo extends StatelessWidget {
               label: '绘制线',
               sublabel: 'DrawPolylineScreen',
               target: DrawPolylineScreen(),
+              isLast: true,
+            ),
+            FunctionItem(
+              label: '绘制圆',
+              sublabel: 'DrawCircleScreen',
+              target: DrawCircleScreen(),
               isLast: true,
             ),
           ],

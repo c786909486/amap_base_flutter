@@ -37,6 +37,7 @@ export 'src/search/model/route_plan_param.dart';
 export 'src/search/model/route_poi_result.dart';
 export 'src/search/model/route_poi_search_query.dart';
 export 'src/search/model/search_bound.dart';
+export 'src/map/model/circle_options.dart';
 
 class AMap {
   static final _channel = MethodChannel('me.yohom/amap_base');
