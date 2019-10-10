@@ -188,7 +188,7 @@ object OpenOfflineManager : MapMethodHandler {
         return this
     }
 
-    override fun onMethodCall(p0: MethodCall, p1: MethodChannel.Result) {
+    override fun onMethodCall(p0: MethodCall?, p1: MethodChannel.Result?) {
         AMapBasePlugin.registrar.activity().startActivity(
                 Intent(AMapBasePlugin.registrar.activity(),
                         OfflineMapActivity::class.java)
@@ -355,24 +355,6 @@ object AddPolyline : MapMethodHandler {
 
         options?.applyTo(map)
 
-        result.success(success)
-    }
-}
-
-object AddCircle : MapMethodHandler{
-    lateinit var map:AMap
-
-    override fun with(map: AMap): MapMethodHandler {
-        this.map = map
-        return this
-    }
-
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-//        val text = call.argument<String>("circleOptions")
-//        log(text!!)
-        val options = call.argument<String>("circleOptions")?.parseFieldJson<UnifiedCircleOptions>()
-        log("map#AddCircle android端参数: circleOptions -> ${options.toString()}")
-        options?.applyTo(map)
         result.success(success)
     }
 }
