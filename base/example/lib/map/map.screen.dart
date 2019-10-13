@@ -17,6 +17,8 @@ import 'package:amap_base_example/widgets/function_group.widget.dart';
 import 'package:amap_base_example/widgets/function_item.widget.dart';
 import 'package:flutter/material.dart';
 
+import 'draw_on_map/draw_rectangle_screen.dart';
+
 class MapDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -106,12 +108,16 @@ class MapDemo extends StatelessWidget {
               label: '绘制线',
               sublabel: 'DrawPolylineScreen',
               target: DrawPolylineScreen(),
-              isLast: true,
             ),
             FunctionItem(
               label: '绘制圆',
               sublabel: 'DrawCircleScreen',
               target: DrawCircleScreen(),
+            ),
+            FunctionItem(
+              label: '绘制矩形',
+              sublabel: 'DrawRectangleScreen',
+              target: DrawRectangleScreen(),
               isLast: true,
             ),
           ],

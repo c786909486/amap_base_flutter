@@ -6,15 +6,15 @@ import 'package:flutter/widgets.dart';
 class CirclePolyOptions {
   static const CIRCLE_FILL_COLOR = Color(0x606699ff);
   static const CIRCLE_STROKE_COLOR = Colors.transparent;
-
+  ///中心点坐标
   final LatLng center;
-
+  ///半径
   final double radius;
-
+  ///填充颜色
   final Color fillColor;
-
+  ///边框颜色
   final Color strokeColor;
-
+  ///边框宽度
   final double strokeWidth;
 
   final bool visible;

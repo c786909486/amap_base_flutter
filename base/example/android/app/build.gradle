@@ -45,9 +45,9 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk {
+        /*ndk {
             abiFilter 'armeabi-v7a'
-        }
+        }*/
     }
 
     // 签名

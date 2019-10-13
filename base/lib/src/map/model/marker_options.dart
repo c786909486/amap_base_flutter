@@ -92,6 +92,9 @@ class MarkerOptions {
   /// 显示在默认弹出框右侧的view [iOS暂未实现]
   String rightCalloutAccessoryView;
 
+  /// 是否根据覆盖物范围显示地图
+  bool changeRange;
+
   MarkerOptions({
     @required this.position,
     this.icon,
@@ -122,6 +125,7 @@ class MarkerOptions {
     this.selected = false,
     this.leftCalloutAccessoryView,
     this.rightCalloutAccessoryView,
+    this.changeRange = false
   });
 
   MarkerOptions.fromJson(Map<String, Object> json) {
@@ -147,6 +151,7 @@ class MarkerOptions {
     title = json['title'] as String;
     visible = json['visible'] as bool;
     zIndex = json['zIndex'] as num;
+    changeRange = json['changeRange'] as bool;
   }
 
   Map<String, Object> toJson() {
@@ -180,6 +185,7 @@ class MarkerOptions {
       'selected': selected,
       'leftCalloutAccessoryView': leftCalloutAccessoryView,
       'rightCalloutAccessoryView': rightCalloutAccessoryView,
+      'changeRange':changeRange
     };
   }
 
@@ -218,7 +224,8 @@ class MarkerOptions {
           highlighted == other.highlighted &&
           selected == other.selected &&
           leftCalloutAccessoryView == other.leftCalloutAccessoryView &&
-          rightCalloutAccessoryView == other.rightCalloutAccessoryView;
+          rightCalloutAccessoryView == other.rightCalloutAccessoryView&&
+          changeRange == other.changeRange;
 
   @override
   int get hashCode =>
@@ -250,10 +257,11 @@ class MarkerOptions {
       highlighted.hashCode ^
       selected.hashCode ^
       leftCalloutAccessoryView.hashCode ^
-      rightCalloutAccessoryView.hashCode;
+      rightCalloutAccessoryView.hashCode ^
+      changeRange.hashCode;
 
   @override
   String toString() {
-    return 'MarkerOptions{icon: $icon, icons: $icons, alpha: $alpha, anchorU: $anchorU, anchorV: $anchorV, draggable: $draggable, infoWindowEnable: $infoWindowEnable, period: $period, position: $position, rotateAngle: $rotateAngle, isFlat: $isFlat, isGps: $isGps, infoWindowOffsetX: $infoWindowOffsetX, infoWindowOffsetY: $infoWindowOffsetY, snippet: $snippet, title: $title, visible: $visible, autoOverturnInfoWindow: $autoOverturnInfoWindow, zIndex: $zIndex, displayLevel: $displayLevel, belowMaskLayer: $belowMaskLayer, lockedToScreen: $lockedToScreen, lockedScreenPoint: $lockedScreenPoint, customCalloutView: $customCalloutView, enabled: $enabled, highlighted: $highlighted, selected: $selected, leftCalloutAccessoryView: $leftCalloutAccessoryView, rightCalloutAccessoryView: $rightCalloutAccessoryView}';
+    return 'MarkerOptions{icon: $icon, icons: $icons, alpha: $alpha, anchorU: $anchorU, anchorV: $anchorV, draggable: $draggable, infoWindowEnable: $infoWindowEnable, period: $period, position: $position, rotateAngle: $rotateAngle, isFlat: $isFlat, isGps: $isGps, infoWindowOffsetX: $infoWindowOffsetX, infoWindowOffsetY: $infoWindowOffsetY, snippet: $snippet, title: $title, visible: $visible, autoOverturnInfoWindow: $autoOverturnInfoWindow, zIndex: $zIndex, displayLevel: $displayLevel, belowMaskLayer: $belowMaskLayer, lockedToScreen: $lockedToScreen, lockedScreenPoint: $lockedScreenPoint, customCalloutView: $customCalloutView, enabled: $enabled, highlighted: $highlighted, selected: $selected, leftCalloutAccessoryView: $leftCalloutAccessoryView, rightCalloutAccessoryView: $rightCalloutAccessoryView}, changeRange:$changeRange';
   }
 }

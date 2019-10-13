@@ -359,6 +359,9 @@ object AddPolyline : MapMethodHandler {
     }
 }
 
+/**
+ * 画圆形覆盖物
+ */
 object AddCircle : MapMethodHandler{
     lateinit var map:AMap
 
@@ -375,6 +378,25 @@ object AddCircle : MapMethodHandler{
         options?.applyTo(map)
         result.success(success)
     }
+}
+
+/**
+ * 绘制矩形
+ */
+object AddRectangle:MapMethodHandler{
+    lateinit var map: AMap
+    override fun with(map: AMap): MapMethodHandler {
+        this.map = map
+        return this
+    }
+
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        val options = call.argument<String>("options")?.parseFieldJson<UnifiedRectangleOptions>()
+        log("map#addRectangle android端参数: options -> ${options.toString()}")
+        options?.applyTo(map)
+        result.success(success)
+    }
+
 }
 
 object ClearMarker : MapMethodHandler {

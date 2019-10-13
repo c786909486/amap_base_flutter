@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
+import 'model/rectangle_options.dart';
+
 class AMapController {
   final MethodChannel _mapChannel;
   final EventChannel _markerClickedEventChannel;
@@ -174,11 +176,20 @@ class AMapController {
     );
   }
 
+  ///绘制圆形覆盖物
   Future addCircle(CirclePolyOptions options){
     L.p('addCircle dart端参数: options -> $options');
     return _mapChannel.invokeMethod(
       'map#addCircle',
       {'circleOptions': options.toJsonString()},
+    );
+  }
+
+  Future addRectangle(RectangleOptions options){
+    L.p('addRectangle dart端参数: options -> $options');
+    return _mapChannel.invokeMethod(
+      'map#addRectangle',
+      {'options': options.toJsonString()},
     );
   }
 

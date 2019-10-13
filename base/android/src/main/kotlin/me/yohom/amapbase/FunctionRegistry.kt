@@ -28,6 +28,7 @@ val MAP_METHOD_HANDLER: Map<String, MapMethodHandler> = mapOf(
         "offline#openOfflineManager" to OpenOfflineManager,
         "map#addPolyline" to AddPolyline,
         "map#addCircle" to AddCircle,
+        "map#addRectangle" to AddRectangle,
         "map#zoomToSpan" to ZoomToSpan,
         "map#screenshot" to ScreenShot,
         "map#setCustomMapStylePath" to SetCustomMapStylePath,

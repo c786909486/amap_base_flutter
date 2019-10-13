@@ -32,26 +32,24 @@ class _DrawCircleScreenState extends State<DrawCircleScreen> {
         centerTitle: true,
       ),
       body: AMapView(
-        onAMapViewCreated: (controller) {
+        onAMapViewCreated: (controller){
           _controller = controller;
-          loading(
-            context,
-//            controller.addPolyline(
-//              PolylineOptions(
-//                latLngList: polylineList,
-//                color: Colors.red,
-//                isDottedLine: true,
-//                isGeodesic: true,
-//                dottedLineType: PolylineOptions.DOTTED_LINE_TYPE_CIRCLE,
-//                width: 10,
-//              ),
-//            ),
-          controller.addCircle(CirclePolyOptions(
-              center: LatLng(39.999391, 116.135972),
-              radius:40000,
-            fillColor: Colors.blue
-          ))
-          ).catchError((e) => showError(context, e.toString()));
+          _controller.mapClickedEvent.listen((latLng) async {
+//            Scaffold.of(context)
+//                .showSnackBar(SnackBar(content: Text(latLng.toString())));
+            await _controller.addCircle(CirclePolyOptions(center: latLng,radius: 10000));
+            await _controller.changeLatLng(latLng);
+          });
+          _controller.setZoomLevel(13);
+//          loading(
+//            context,
+////
+//          controller.addCircle(CirclePolyOptions(
+//              center: await controller.getCenterLatlng(),
+//              radius:40000,
+//            fillColor: Colors.blue
+//          ))
+//          ).catchError((e) => showError(context, e.toString()));
         },
         amapOptions: AMapOptions(),
       ),

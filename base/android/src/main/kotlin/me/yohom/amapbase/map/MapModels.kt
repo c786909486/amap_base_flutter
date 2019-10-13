@@ -97,7 +97,9 @@ class UnifiedMarkerOptions(
         /// 显示等级 缺少文档
         private val displayLevel: Int,
         /// 是否在掩层下 缺少文档
-        private val belowMaskLayer: Boolean
+        private val belowMaskLayer: Boolean,
+        /// 是否根据覆盖物范围显示地图
+        private val changeRange:Boolean
 ) {
     constructor(options: MarkerOptions) : this(
             icon = options.icon.toString(),
@@ -120,13 +122,15 @@ class UnifiedMarkerOptions(
             autoOverturnInfoWindow = options.isInfoWindowAutoOverturn,
             zIndex = options.zIndex,
             displayLevel = options.displayLevel,
-            belowMaskLayer = options.isBelowMaskLayer
+            belowMaskLayer = options.isBelowMaskLayer,
+            changeRange = false
     )
 
     fun applyTo(map: AMap) {
         map.addMarker(toMarkerOption())
-
-        map.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.builder().include(position).build(), 100))
+        if (changeRange){
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.builder().include(position).build(), 100))
+        }
     }
 
     fun toMarkerOption(): MarkerOptions = MarkerOptions()
@@ -267,10 +271,11 @@ class UnifiedCircleOptions(
         ///边框宽度
         val strokeWidth:Double,
         ///可见？
-        val visible: Boolean
+        val visible: Boolean,
+        /// 是否根据覆盖物范围显示地图
+        val changeRange: Boolean
 ){
     fun applyTo(map: AMap){
-        Log.d("dasdasda",radius.toString());
         val option = CircleOptions()
                 .center(this@UnifiedCircleOptions.center)
                 .radius(this@UnifiedCircleOptions.radius)
@@ -279,6 +284,32 @@ class UnifiedCircleOptions(
                 .strokeWidth(this@UnifiedCircleOptions.strokeWidth.toFloat())
                 .visible(this@UnifiedCircleOptions.visible)
         map.addCircle(option)
+        if (changeRange){
+            map.animateCamera(CameraUpdateFactory.newLatLngBounds(LatLngBounds.builder().include(center).build(), 100))
+        }
+    }
+}
+
+class UnifiedRectangleOptions(
+        //坐标点集合
+        val latLngs:MutableList<LatLng>,
+        //边框宽度
+        val strokeWidth: Double,
+        //填充颜色
+        val fillColor:String,
+        //边框颜色
+        val strokeColor:String,
+        //可见
+        val visible: Boolean
+){
+    fun applyTo(map: AMap){
+        val options = PolygonOptions()
+                .addAll(latLngs)
+                .strokeColor(strokeColor.hexStringToColorInt()?:Color.parseColor("#606699ff"))
+                .strokeWidth(strokeWidth.toFloat())
+                .fillColor(fillColor.hexStringToColorInt()?:Color.parseColor("#306699ff"))
+                .visible(visible)
+        map.addPolygon(options)
     }
 }
 
