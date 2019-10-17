@@ -394,6 +394,31 @@
 
 @end
 
+@implementation AddCircle{
+    MAMapView *_mapView;
+}
+- (NSObject <MapMethodHandler> *)initWith:(MAMapView *)mapView {
+    _mapView = mapView;
+    return self;
+}
+
+- (void)onMethodCall:(FlutterMethodCall *)call :(FlutterResult)result {
+    NSString *optionsJson = (NSString *) call.arguments[@"circleOptions"];
+
+    NSLog(@"map#addCircle ios端参数: optionsJson -> %@", optionsJson);
+
+    UnifiedCircleOptions *options = [UnifiedCircleOptions initWithJson:optionsJson];
+
+    CircleOverlay *circle =[CircleOverlay circleWithCenterCoordinate:[options.center toCLLocationCoordinate2D] radius:options.radius];
+    circle.circleOptions = options;
+       //在地图上添加圆
+    [_mapView addOverlay: circle];
+
+    result(success);
+}
+
+@end
+
 @implementation AddPolyline {
     MAMapView *_mapView;
 }
@@ -422,8 +447,38 @@
 
     result(success);
 }
-
 @end
+
+@implementation AddRectangle {
+    MAMapView *_mapView;
+}
+- (NSObject <MapMethodHandler> *)initWith:(MAMapView *)mapView {
+    _mapView = mapView;
+    return self;
+}
+
+- (void)onMethodCall:(FlutterMethodCall *)call :(FlutterResult)result {
+    NSString *optionsJson = (NSString *) call.arguments[@"options"];
+
+    NSLog(@"map#addRectangle ios端参数: optionsJson -> %@", optionsJson);
+
+    UnifiedRectangleOptions *options = [UnifiedRectangleOptions initWithJson:optionsJson];
+
+    NSUInteger count = options.latLngs.count;
+
+    CLLocationCoordinate2D commonPolylineCoords[count];
+    for (NSUInteger i = 0; i < count; ++i) {
+        commonPolylineCoords[i] = [options.latLngs[i] toCLLocationCoordinate2D];
+    }
+
+    PolygonOverlay *polyline = [PolygonOverlay polygonWithCoordinates:commonPolylineCoords count:options.latLngs.count];
+    polyline.options = options;
+    [_mapView addOverlay:polyline];
+
+    result(success);
+}
+@end
+
 
 @implementation ClearMarker {
     MAMapView *_mapView;

@@ -14,6 +14,8 @@
 
 static NSString *mapChannelName = @"me.yohom/map";
 static NSString *markerClickedChannelName = @"me.yohom/marker_clicked";
+static NSString *mapClickedChannelName = @"me.yohom/map_clicked";
+
 
 @interface MarkerEventHandler : NSObject <FlutterStreamHandler>
 @property(nonatomic) FlutterEventSink sink;
@@ -25,6 +27,24 @@ static NSString *markerClickedChannelName = @"me.yohom/marker_clicked";
 - (FlutterError *_Nullable)onListenWithArguments:(id _Nullable)arguments
                                        eventSink:(FlutterEventSink)events {
   _sink = events;
+  return nil;
+}
+
+- (FlutterError *_Nullable)onCancelWithArguments:(id _Nullable)arguments {
+  return nil;
+}
+@end
+
+@interface MapEventHandler : NSObject <FlutterStreamHandler>
+@property(nonatomic) FlutterEventSink mapSink;
+@end
+
+@implementation MapEventHandler {
+}
+
+- (FlutterError *_Nullable)onListenWithArguments:(id _Nullable)arguments
+                                       eventSink:(FlutterEventSink)events {
+  _mapSink = events;
   return nil;
 }
 
@@ -59,8 +79,10 @@ static NSString *markerClickedChannelName = @"me.yohom/marker_clicked";
   UnifiedAMapOptions *_options;
   FlutterMethodChannel *_methodChannel;
   FlutterEventChannel *_markerClickedEventChannel;
+  FlutterEventChannel *_mapClickedEventChannel;
   MAMapView *_mapView;
   MarkerEventHandler *_eventHandler;
+  MapEventHandler *_mapHandler;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -128,6 +150,11 @@ static NSString *markerClickedChannelName = @"me.yohom/marker_clicked";
   _markerClickedEventChannel = [FlutterEventChannel eventChannelWithName:[NSString stringWithFormat:@"%@%lld", markerClickedChannelName, _viewId]
                                                          binaryMessenger:[AMapBasePlugin registrar].messenger];
   [_markerClickedEventChannel setStreamHandler:_eventHandler];
+ 
+    _mapHandler = [[MapEventHandler alloc] init];
+  _mapClickedEventChannel = [FlutterEventChannel eventChannelWithName:[NSString stringWithFormat:@"%@%lld", mapClickedChannelName, _viewId]
+    binaryMessenger:[AMapBasePlugin registrar].messenger];
+    [_mapClickedEventChannel setStreamHandler:_mapHandler];
 }
 
 #pragma MAMapViewDelegate
@@ -139,21 +166,33 @@ static NSString *markerClickedChannelName = @"me.yohom/marker_clicked";
     _eventHandler.sink([annotation.markerOptions mj_JSONString]);
   }
 }
+///
+- (void)mapView:(MAMapView *)mapView didSingleTappedAtCoordinate:(CLLocationCoordinate2D)coordinate{
+    
+   
+    LatLng *latLng = [LatLng new];
+    latLng.longitude = coordinate.longitude;
+    latLng.latitude = coordinate.latitude;
+     _mapHandler.mapSink([latLng mj_JSONString]);
+//    NSLog(@"打印整形：%@",[latLng mj_JSONString]);
+};
+
 
 /// 渲染overlay回调
 - (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id <MAOverlay>)overlay {
   // 绘制折线
   if ([overlay isKindOfClass:[PolylineOverlay class]]) {
     PolylineOverlay *polyline = (PolylineOverlay *) overlay;
-
+      
     MAPolylineRenderer *polylineRenderer = [[MAPolylineRenderer alloc] initWithPolyline:polyline];
 
     UnifiedPolylineOptions *options = [polyline options];
-
+//      NSLog(@"getData-> %@",[options.latLngList mj_JSONString]);
     polylineRenderer.lineWidth = (CGFloat) (options.width * 0.5); // 相同的值, Android的线比iOS的粗
     polylineRenderer.strokeColor = [options.color hexStringToColor];
     polylineRenderer.lineJoinType = (MALineJoinType) options.lineJoinType;
     polylineRenderer.lineCapType = (MALineCapType) options.lineCapType;
+    polylineRenderer.fillColor = [options.fillColor hexStringToColor];
     if (options.isDottedLine) {
       polylineRenderer.lineDashType = (MALineDashType) ((MALineCapType) options.dottedLineType + 1);
     } else {
@@ -162,6 +201,28 @@ static NSString *markerClickedChannelName = @"me.yohom/marker_clicked";
 
     return polylineRenderer;
   }
+    
+    if ([overlay isKindOfClass:[MACircle class]]){
+        CircleOverlay *circle = (CircleOverlay *)overlay;
+        MACircleRenderer *circleRenderer = [[MACircleRenderer alloc] initWithCircle:circle];
+        UnifiedCircleOptions *options = [circle circleOptions];
+        circleRenderer.lineWidth    = (CGFloat) (options.strokeWidth * 0.5);
+        circleRenderer.strokeColor  = [options.strokeColor hexStringToColor];
+        circleRenderer.fillColor    = [options.fillColor hexStringToColor];
+        
+        return circleRenderer;
+    }
+    
+    if ([overlay isKindOfClass:[MAPolygon class]]) {
+        PolygonOverlay *polygon = (PolygonOverlay *)overlay;
+        MAPolygonRenderer *polygonRenderer = [[MAPolygonRenderer alloc] initWithPolygon:polygon];
+        UnifiedRectangleOptions *options = [polygon options];
+        polygonRenderer.lineWidth = (CGFloat) (options.strokeWidth * 0.5);
+        polygonRenderer.strokeColor = [options.strokeColor hexStringToColor];
+        polygonRenderer.fillColor = [options.fillColor hexStringToColor];
+        return polygonRenderer;
+        
+    }
 
   return nil;
 }

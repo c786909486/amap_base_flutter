@@ -5,12 +5,15 @@
 #import <Foundation/Foundation.h>
 #import "MAPointAnnotation.h"
 #import "MAPolyline.h"
+#import "MAPolygon.h"
 
 @class UnifiedMarkerOptions;
 @class LatLng;
 @class CameraPosition;
 @class UnifiedPolylineOptions;
 @class MAMapView;
+@class UnifiedCircleOptions;
+@class UnifiedRectangleOptions;
 
 
 @interface MarkerAnnotation : MAPointAnnotation
@@ -22,6 +25,13 @@
 @property(nonatomic) UnifiedPolylineOptions *options;
 @end
 
+@interface PolygonOverlay : MAPolygon
+@property(nonatomic) UnifiedRectangleOptions *options;
+@end
+
+@interface CircleOverlay : MACircle
+@property(nonatomic) UnifiedCircleOptions *circleOptions;
+@end
 
 @interface UnifiedAMapOptions : NSObject
 /// “高德地图”Logo的位置
@@ -189,6 +199,44 @@
 @property(nonatomic) BOOL isUseGradient;
 /// 线段是否使用纹理贴图
 @property(nonatomic) BOOL isUseTexture;
+/// 填充色
+@property(nonatomic) NSString *fillColor;
+@end
+
+
+@interface UnifiedCircleOptions : NSObject
+
++ (instancetype)initWithJson:(NSString *)json;
+
+/// 圆中心点
+@property(nonatomic) LatLng *center;
+ ///圆半径
+@property(nonatomic) CGFloat radius;
+///填充颜色
+@property(nonatomic) NSString *fillColor;
+ ///边框颜色
+@property(nonatomic) NSString *strokeColor;
+ ///边框宽度
+@property(nonatomic) CGFloat strokeWidth;
+///可见？
+@property(nonatomic) BOOL visible;
+
+@end
+
+@interface UnifiedRectangleOptions : NSObject
+
++ (instancetype)initWithJson:(NSString *)json;
+
+/// 顶点
+@property(nonatomic) NSArray<LatLng *> *latLngs;
+///填充颜色
+@property(nonatomic) NSString *fillColor;
+ ///边框颜色
+@property(nonatomic) NSString *strokeColor;
+ ///边框宽度
+@property(nonatomic) CGFloat strokeWidth;
+/// 线段的可见属性
+@property(nonatomic) BOOL visible;
 
 @end
 

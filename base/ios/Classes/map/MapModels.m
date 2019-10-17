@@ -20,6 +20,17 @@
 }
 @end
 
+@implementation PolygonOverlay{
+    
+}
+@end
+
+@implementation CircleOverlay{
+    
+}
+
+@end
+
 
 @implementation UnifiedAMapOptions {
 }
@@ -196,6 +207,27 @@
 
 @end
 
+@implementation UnifiedCircleOptions{
+    
+}
++(instancetype)initWithJson:(NSString *)json{
+    return [UnifiedCircleOptions mj_objectWithKeyValues:json];
+}
+
+@end
+@implementation UnifiedRectangleOptions {
+
+}
++ (instancetype)initWithJson:(NSString *)json {
+    [UnifiedRectangleOptions mj_setupObjectClassInArray:^NSDictionary *{
+        return @{
+                @"latLngs" : @"LatLng",
+        };
+    }];
+    return [UnifiedRectangleOptions mj_objectWithKeyValues:json];
+}
+
+@end
 
 @implementation UnifiedUiSettings
 
